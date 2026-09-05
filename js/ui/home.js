@@ -65,7 +65,7 @@ window.HomeScreen = (function () {
 
       <section class="mode-grid">
         <button class="mode-card mode-quest" data-mode="quest">
-          <span class="mode-icon">⛩️</span>
+          <span class="mode-icon">🏮</span>
           <span class="mode-name">冒险闯关</span>
           <span class="mode-desc">四篇廿六关，逐行点亮五十音</span>
           <span class="mode-meta">⭐ ${stars.got}/${stars.max}</span>

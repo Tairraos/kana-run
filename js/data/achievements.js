@@ -21,7 +21,7 @@ window.ACHV = (function () {
     { id: 'kata_master',    icon: '👑', name: '片假名大师', desc: '全部片假名达到 3★' },
     { id: 'q500',           icon: '🐎', name: '荒马',       desc: '累计作答 500 题' },
     { id: 'lvl5',           icon: '🎆', name: '花火大会',   desc: '达到 5 级' },
-    { id: 'lvl10',         icon: '⛩',  name: '传说伊始',   desc: '达到 10 级' }
+    { id: 'lvl10',         icon: '🏮',  name: '传说伊始',   desc: '达到 10 级' }
   ];
   const byId = {};
   LIST.forEach(a => { byId[a.id] = a; });

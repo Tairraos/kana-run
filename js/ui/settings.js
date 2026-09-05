@@ -60,7 +60,8 @@ window.Settings = (function () {
           STORE.setSetting('theme', t.id);
           window.applyTheme(t.id);
           SFX.click();
-          open(); // 重渲染
+          m.close();
+          setTimeout(open, 60);
         });
       }
       tl.appendChild(b);

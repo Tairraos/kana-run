@@ -30,7 +30,7 @@ window.STORE = (function () {
       omikuji: { date: null, fortune: null, buffUntil: 0 },
       daily: { date: U.todayKey(), rounds: 0, correct: 0, petalsToday: 0 },
       streak: { lastDate: null, count: 0, best: 0 },
-      totals: { answered: 0, correct: 0, maxCombo: 0, playDays: 0 },
+      totals: { answered: 0, correct: 0, maxCombo: 0, playDays: 1 },
       swift: { best: 0, bestCorrect: 0 },
       match: { bestMoves: {}, bestTime: {} },
       settings: { voice: true, sfx: true, bgm: false, theme: 'neon', freeUnlock: false },

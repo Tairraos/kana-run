@@ -70,7 +70,7 @@ window.QUIZ = (function () {
     if (type === 'cross' && !counterpart(entry)) type = 'k2r';
     const { options, answerIdx } = buildOptions(entry, opts.pool, opts, type);
     const q = { type, x: entry, options, answerIdx, done: false };
-    if (type === 'k2r') { q.prompt = entry.k; q.promptKind = 'kana'; }
+    if (type === 'k2r') { q.prompt = entry.k; q.promptKind = 'k2r'; }
     else if (type === 'r2k') { q.prompt = entry.r; q.promptKind = 'romaji'; }
     else if (type === 'listen') { q.prompt = entry.k; q.promptKind = 'listen'; }
     else { q.prompt = entry.k; q.promptKind = 'cross'; q.crossTarget = counterpart(entry).s; }

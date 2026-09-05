@@ -53,9 +53,9 @@ window.QuestScreen = (function () {
     });
 
     const path = document.getElementById('stage-path');
-    ch.stages.forEach((st, i) => {
+    ROWS.STAGES.filter(s => s.ch === ch.id).forEach((st, i) => {
       const rec = STORE.stageRec(st.id) || { stars: 0 };
-      const un = unlocked && STORE.stageUnlocked(ROWS.byId[st.id], selChapter);
+      const un = unlocked && STORE.stageUnlocked(st, selChapter);
       const node = U.el(`
         <button class="stage-node ${rec.stars > 0 ? 'cleared' : ''} ${un ? '' : 'locked'}" ${un ? '' : 'disabled'}>
           <span class="stage-lamp">${un ? (rec.stars > 0 ? '🏮' : '🕯') : '🔒'}</span>

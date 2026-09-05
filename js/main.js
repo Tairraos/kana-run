@@ -3,6 +3,15 @@
   'use strict';
   const U = window.U, K = window.KANA, STORE = window.STORE, UI = window.UI, SFX = window.SFX;
 
+  // 运行时错误收集（调试/自检用）
+  window.__KQ_ERRORS = [];
+  window.addEventListener('error', e => {
+    window.__KQ_ERRORS.push(String(e.message || e));
+  });
+  window.addEventListener('unhandledrejection', e => {
+    window.__KQ_ERRORS.push('promise: ' + String(e.reason));
+  });
+
   // 边界处校验数据形状：加载即失败可见
   const counts = K.assert();
   console.info('[五十音物語] 假名数据校验通过', counts);
@@ -46,7 +55,7 @@
   if (STORE.state.totals.answered === 0 && !localStorage.getItem('kq_welcomed')) {
     localStorage.setItem('kq_welcomed', '1');
     setTimeout(() => {
-      UI.toast('欢迎来到五十音物語！从「冒险闯关」的 あ行开始吧', '⛩️');
+      UI.toast('欢迎来到五十音物語！从「冒险闯关」的 あ行开始吧', '🏮');
     }, 800);
   }
 })();
