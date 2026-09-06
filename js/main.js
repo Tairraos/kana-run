@@ -51,9 +51,16 @@
 
   UI.show('home');
 
+  // 存储不可用（隐私模式等）：明确告知，避免"进度消失"的困惑
+  if (!STORE.storageOk) {
+    setTimeout(() => UI.toast('当前浏览器环境无法保存进度（常见于隐私窗口），建议用正常窗口游玩', '⚠️'), 1600);
+  }
+
   // 新玩家欢迎
-  if (STORE.state.totals.answered === 0 && !localStorage.getItem('kq_welcomed')) {
-    localStorage.setItem('kq_welcomed', '1');
+  let welcomed = false;
+  try { welcomed = !!localStorage.getItem('kq_welcomed'); } catch (e) {}
+  if (STORE.state.totals.answered === 0 && !welcomed) {
+    try { localStorage.setItem('kq_welcomed', '1'); } catch (e) {}
     setTimeout(() => {
       UI.toast('欢迎来到五十音物語！从「冒险闯关」的 あ行开始吧', '🏮');
     }, 800);

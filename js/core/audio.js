@@ -128,30 +128,49 @@ window.SFX = (function () {
       } catch (e) { /* 语音失败静默 */ }
     },
 
-    /* ---- 环境 BGM：五声音阶拨弦 ---- */
+    /* ---- 环境 BGM：五声音阶拨弦 + 长音垫底，轻轻淡淡的 ---- */
     startBgm() {
       if (bgmOn || !ensure()) return;
       bgmOn = true;
-      bgmGain.gain.setTargetAtTime(settings().sfx ? 0.14 : 0.14, ctx.currentTime, 1.5);
-      const roots = [0, -2, 3, -4]; // A G C F 感觉的五声进行
+      bgmGain.gain.setTargetAtTime(0.9, ctx.currentTime, 3);
+      const roots = [0, -3, -5, -7]; // 温柔的下行进行
+      const scale = [0, 2, 4, 7, 9, 12];
       let bar = 0;
+      const pluck = (semi, t, vol, dur) => {
+        const o = ctx.createOscillator(), g = ctx.createGain(), f = ctx.createBiquadFilter();
+        f.type = 'lowpass'; f.frequency.value = 1500;
+        o.type = 'triangle'; o.frequency.value = hz(semi);
+        g.gain.setValueAtTime(0.0001, t);
+        g.gain.exponentialRampToValueAtTime(vol, t + 0.04);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+        o.connect(f); f.connect(g); g.connect(bgmGain);
+        o.start(t); o.stop(t + dur + 0.1);
+      };
       bgmTimer = setInterval(() => {
         if (!ctx || ctx.state !== 'running') return;
         const root = roots[bar % roots.length]; bar++;
-        const notes = [0, 4, 9, 12, 7];
-        for (let i = 0; i < 4; i++) {
-          const semi = root + U.randItem(notes) + (Math.random() < 0.3 ? 12 : 0);
-          const t = ctx.currentTime + i * (0.9 + Math.random() * 0.4);
+        const now = ctx.currentTime + 0.05;
+        // 长音垫底（根音 + 五度），像远处的水面
+        [[root - 12, 7.6, 0.045], [root - 5, 7.6, 0.03]].forEach(pair => {
           const o = ctx.createOscillator(), g = ctx.createGain();
-          o.type = 'triangle';
-          o.frequency.value = hz(semi - 12);
-          g.gain.setValueAtTime(0.0001, t);
-          g.gain.exponentialRampToValueAtTime(0.5, t + 0.02);
-          g.gain.exponentialRampToValueAtTime(0.0001, t + 1.4);
+          o.type = 'sine'; o.frequency.value = hz(pair[0]);
+          g.gain.setValueAtTime(0.0001, now);
+          g.gain.linearRampToValueAtTime(pair[2], now + 2.6);
+          g.gain.linearRampToValueAtTime(0.0001, now + pair[1]);
           o.connect(g); g.connect(bgmGain);
-          o.start(t); o.stop(t + 1.5);
+          o.start(now); o.stop(now + pair[1] + 0.1);
+        });
+        // 稀疏的五声拨弦，留白比音符多
+        [0.4, 1.7, 3.2, 4.5, 6.0].forEach(dt => {
+          if (Math.random() < 0.22) return;
+          const semi = root - 12 + scale[Math.floor(Math.random() * scale.length)];
+          pluck(semi, now + dt, 0.085, 1.7);
+        });
+        // 偶尔一记高音风铃
+        if (Math.random() < 0.35) {
+          pluck(root + 12 + [0, 4, 9][Math.floor(Math.random() * 3)], now + 2 + Math.random() * 3.2, 0.04, 2.4);
         }
-      }, 4200);
+      }, 8000);
     },
     stopBgm() {
       bgmOn = false;

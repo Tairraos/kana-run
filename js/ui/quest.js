@@ -175,8 +175,8 @@ window.QuestScreen = (function () {
       : q.promptKind === 'listen'
         ? `<div class="q-prompt-label">听音辨字</div><button class="q-prompt q-listen" id="q-replay">🔊 再听一次</button>`
         : q.promptKind === 'cross'
-          ? `<div class="q-prompt-label">它的${q.crossTarget === 'kata' ? '片假名' : '平假名'}是？</div><div class="q-prompt">${q.prompt}</div>`
-          : `<div class="q-prompt-label">这个假名读作？</div><div class="q-prompt">${q.prompt}</div>`;
+          ? `<div class="q-prompt-label">它的${q.crossTarget === 'kata' ? '片假名' : '平假名'}是？</div><div class="q-prompt">${q.prompt}</div><div class="q-prompt-speak">${UI.speakerBtn(q.x.k)}</div>`
+          : `<div class="q-prompt-label">这个假名读作？</div><div class="q-prompt">${q.prompt}</div><div class="q-prompt-speak">${UI.speakerBtn(q.x.k)}</div>`;
 
     body.innerHTML = `
       <div class="quiz-hud">
@@ -244,6 +244,8 @@ window.QuestScreen = (function () {
         ? `<span class="fb-ok">✔ ${entry.k} = ${entry.r}</span>`
         : `<span class="fb-bad">✘ 正确是 <b>${entry.k}（${entry.r}）</b> · ${entry.m}</span>`;
     }
+    // 读一遍正确答案，加深读音记忆
+    if (STORE.state.settings.voice) SFX.speak(entry.k);
 
     if (ev.levelUp) {
       setTimeout(() => {

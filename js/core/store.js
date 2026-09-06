@@ -33,7 +33,7 @@ window.STORE = (function () {
       totals: { answered: 0, correct: 0, maxCombo: 0, playDays: 1 },
       swift: { best: 0, bestCorrect: 0 },
       match: { bestMoves: {}, bestTime: {} },
-      settings: { voice: true, sfx: true, bgm: false, theme: 'neon', freeUnlock: false },
+      settings: { voice: true, sfx: true, bgm: true, theme: 'neon', freeUnlock: false },
       flags: { nightOwl: false, sakuraStorm: false }
     };
   }
@@ -42,22 +42,62 @@ window.STORE = (function () {
   const listeners = {};
   let saveDirty = false;
 
+  function mergeDefaults(s) {
+    const d = defaults();
+    // 补齐缺失字段 + 浅合并已有对象，保证任何旧存档形状都能安全加载
+    Object.keys(d).forEach(k => {
+      if (s[k] === undefined) { s[k] = d[k]; return; }
+      if (typeof d[k] === 'object' && !Array.isArray(d[k])) {
+        s[k] = Object.assign({}, d[k], s[k]);
+      }
+    });
+    return s;
+  }
+
   function load() {
     try {
       const raw = localStorage.getItem(KEY);
       if (!raw) return defaults();
       const s = JSON.parse(raw);
       if (!s || s.v !== 1) return defaults();
-      const d = defaults();
-      // 浅合并，保证新增字段有默认值
-      Object.keys(d).forEach(k => {
-        if (s[k] === undefined) return;
-        if (typeof d[k] === 'object' && !Array.isArray(d[k])) {
-          s[k] = Object.assign({}, d[k], s[k]);
-        }
-      });
+      mergeDefaults(s);
+      // 一次性迁移：修正早期默认值（朗读/音乐打开）
+      if (!s.m201) {
+        s.m201 = 1;
+        s.settings.voice = true;
+        s.settings.bgm = true;
+      }
       return s;
     } catch (e) { return defaults(); }
+  }
+
+  // 存储可用性探测（隐私模式等场景会失败）
+  const storageOk = (() => {
+    try {
+      localStorage.setItem('__kq_probe', '1');
+      localStorage.removeItem('__kq_probe');
+      return true;
+    } catch (e) { return false; }
+  })();
+
+  /* 存档码：跨打开方式（file:// 与本地服务是不同存档位）搬运进度 */
+  function exportCode() {
+    try {
+      return 'KQ1.' + btoa(unescape(encodeURIComponent(JSON.stringify(state))));
+    } catch (e) { return null; }
+  }
+  function importCode(code) {
+    try {
+      const str = String(code || '').trim();
+      if (!str.startsWith('KQ1.')) return false;
+      const obj = JSON.parse(decodeURIComponent(escape(atob(str.slice(4)))));
+      if (!obj || obj.v !== 1) return false;
+      mergeDefaults(obj);
+      obj.m201 = 1;
+      localStorage.setItem(KEY, JSON.stringify(obj));
+      state = obj; // 内存中立即生效（页面随后的刷新会完整重建视图）
+      return true;
+    } catch (e) { return false; }
   }
 
   function saveNow() {
@@ -336,6 +376,7 @@ window.STORE = (function () {
   return {
     get state() { return state; },
     THEMES, TITLES, GACHA_COST, DAILY_GOAL,
+    storageOk, exportCode, importCode,
     on, emit, save, markSave,
     level, levelProgress, addXp, addPetals,
     tickDaily, dailyGoalMet, markRoundCompleted,

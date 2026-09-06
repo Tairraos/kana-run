@@ -82,6 +82,13 @@
 }
 .pop-in { animation: popIn 0.4s ease; }
 
+@keyframes chipPop {
+  0% { opacity: 0; transform: translate(-50%, -110%) scale(0.8); }
+  12% { opacity: 1; transform: translate(-50%, -130%) scale(1); }
+  80% { opacity: 1; transform: translate(-50%, -138%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -150%) scale(0.95); }
+}
+
 /* 减少动态偏好：关掉装饰动画 */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

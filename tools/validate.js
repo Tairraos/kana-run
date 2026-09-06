@@ -35,6 +35,8 @@ const sandbox = {
     createElement: () => ({ style: {}, setAttribute: () => {}, classList: { add: () => {}, remove: () => {} }, addEventListener: () => {} }),
     body: { dataset: {}, classList: { add: () => {}, remove: () => {} }, appendChild: () => {} }
   },
+  btoa: s => Buffer.from(s, 'binary').toString('base64'),
+  atob: s => Buffer.from(s, 'base64').toString('binary'),
   SpeechSynthesisUtterance: function () {}
 };
 sandbox.window = sandbox;
@@ -228,6 +230,24 @@ section('存储与经济');
   // 快照统计
   const s = STORE.snapshotStats();
   ok(typeof s.answered === 'number' && s.seenHira >= 1, '快照统计可用');
+
+  // 存储探测与存档码
+  ok(STORE.storageOk === true, '存储探测可用');
+  const code = STORE.exportCode();
+  ok(code && code.startsWith('KQ1.'), '导出存档码');
+  const beforeXp = STORE.state.xp, beforePetals = STORE.state.petals;
+  STORE.reset();
+  ok(STORE.state.xp === 0, '重置后归零');
+  ok(STORE.importCode(code), '导入存档码成功');
+  ok(STORE.state.xp === beforeXp && STORE.state.petals === beforePetals, '存档码往返一致');
+  ok(STORE.importCode('垃圾输入') === false, '非法存档码被拒绝');
+
+  // 旧存档迁移：voice/bgm 被修正为开
+  const legacy = { v: 1, xp: 55, settings: { voice: false, bgm: false, theme: 'neon', sfx: true, freeUnlock: false } };
+  sandbox.localStorage.setItem('kq_save_v1', JSON.stringify(legacy));
+  vm.runInContext(fs.readFileSync(path.join(ROOT, 'js/core/store.js'), 'utf8'), sandbox, { filename: 'store-reload' });
+  ok(sandbox.STORE.state.settings.bgm === true && sandbox.STORE.state.settings.voice === true, '迁移：旧存档朗读/音乐默认打开');
+  ok(sandbox.STORE.state.xp === 55, '迁移：旧进度保留');
 }
 
 console.log(`\n结果：${pass} 通过 / ${fail} 失败`);

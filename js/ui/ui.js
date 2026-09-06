@@ -32,7 +32,21 @@ window.UI = (function () {
     screen.innerHTML = '';
     screen.dataset.name = name;
     currentName = name;
-    screens[name].mount(screen, params || {});
+    try {
+      screens[name].mount(screen, params || {});
+    } catch (err) {
+      // 崩溃护栏：任何屏幕渲染失败都给出可见出口，而不是神秘消失
+      if (window.__KQ_ERRORS) window.__KQ_ERRORS.push('mount:' + name + ':' + (err && err.message || err));
+      screen.innerHTML = `
+        <div class="screen-head">
+          <h1 class="screen-title">呀，出了一点小状况</h1>
+          <p class="screen-sub">${String(err && err.message || err)}</p>
+        </div>
+        <div style="text-align:center;margin-top:26px">
+          <button class="btn btn-primary" id="err-home">回主页</button>
+        </div>`;
+      document.getElementById('err-home').addEventListener('click', () => show('home'));
+    }
     syncTopbar();
     window.scrollTo(0, 0);
   }
@@ -131,9 +145,21 @@ window.UI = (function () {
   function speakerBtn(kana) {
     return `<button class="speak-btn" data-speak="${kana}" aria-label="朗读">🔊</button>`;
   }
+  // 点击朗读：播放语音，并弹出读音气泡（没有日语语音时也能看到读音）
   document.addEventListener('click', e => {
     const b = e.target.closest('[data-speak]');
-    if (b) { window.SFX.speak(b.dataset.speak); e.stopPropagation(); }
+    if (!b) return;
+    const k = b.dataset.speak;
+    const entry = window.KANA.byChar[k];
+    const hasVoice = window.SFX.hasJapaneseVoice();
+    window.SFX.speak(k);
+    const chip = U.el(`<div class="reading-chip">${k}<b>${entry ? entry.r : ''}</b>${hasVoice ? '' : '<small>未安装日语语音</small>'}</div>`);
+    document.body.appendChild(chip);
+    const r = b.getBoundingClientRect();
+    chip.style.left = Math.round(r.left + r.width / 2) + 'px';
+    chip.style.top = Math.round(r.top) + 'px';
+    setTimeout(() => chip.remove(), 1500);
+    e.stopPropagation();
   });
 
   return {
