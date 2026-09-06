@@ -1,5 +1,7 @@
 # PLAN.md — 执行计划与进度日志（一等公民文档）
 
+> **当前状态：已上线 🌸 <https://kana-monogatari.vercel.app>**（Vercel 托管；更新方式：`vercel deploy --prod --yes`）
+
 > 方法：借鉴 OpenAI《Harness Engineering》——人类掌舵、智能体执行；仓库即记录系统；
 > 计划/进度/决策日志随代码提交；短回路验证（不变量脚本 + 真机浏览器截图）。
 
@@ -7,12 +9,21 @@
 
 - [x] M0 调研：OpenAI Harness Engineering 方法论 + 五十音游戏化设计调研（Tofugu / SRS 论文 / kawaiiDungeon / Duolingo / 日系视觉）
 - [x] M1 骨架：git init、AGENTS.md（地图）、DESIGN.md（设计定案）、本文件
-- [x] M2 数据层：kana.js（208 项假名 + 中文助记 + 字源 + 形近）、rows.js（4 篇 24 关）、achievements.js、kotodama.js
+- [x] M2 数据层：kana.js（208 项假名 + 中文助记 + 字源 + 形近）、rows.js（4 篇 31 关）、achievements.js、kotodama.js
 - [x] M3 核心层：util / store（状态+经济+成就）/ srs（Leitner）/ quiz（出题+干扰项）/ audio（WebAudio 合成+语音）/ fx（樱花烟花纸屑星光）
 - [x] M4 UI 层：router / home / quest（闯关）/ swift（速答）/ match（配对）/ learn（图鉴）/ collection（收藏+成就+言灵）/ omikuji（御神签）/ settings（主题+自由解锁）
 - [x] M5 视觉：夜樱霓虹主题 + 4 套可解锁主题 + 字体体系 + 全部关键帧动画
 - [x] M6 验证：tools/validate.js 全绿 + 浏览器逐屏实测（截图）+ 控制台零报错
 - [x] M7 README + 最终审计
+- [x] M8 用户反馈轮：读音气泡+朗读迁移 / 存档码导出导入 / 存储探测警告 / 默认轻柔 BGM / UI 崩溃护栏（validate 1095 断言 + 实况标签页复测）
+- [x] M9 上线：发布至 Vercel → <https://kana-monogatari.vercel.app>（静态站 vercel.json + 线上验收 200/零报错/闯关冒烟）
+
+## 后备候选（未排期，按需取用）
+
+- GitHub 连接实现 push 自动部署（当前为 CLI 手动发布）
+- 听音辨字题型在无日语语音设备上的合成音替代方案
+- 拗音打字/手写输入题型、词句模式（用已学会的假名拼单词）
+- 数据导出为 Anki 卡组
 
 ## 进度日志
 
