@@ -3,6 +3,8 @@
 > 在夜樱之下，把五十音刻进记忆。
 > 一个**纯网页、零依赖、可离线**的日语五十音学习游戏。双击 `index.html` 即可开始。
 
+**▶ 线上版：<https://kana-monogatari.vercel.app>**（由 Vercel 托管，每次 `vercel deploy --prod` 更新）
+
 ![home](dev-preview.png)
 
 ## 怎么玩
