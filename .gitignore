@@ -1,5 +1,53 @@
-# 开发产物不入库
+# ---- 开发产物不入库 ----
 .dev/
 *.log
-.DS_Store
 .vercel
+
+# ---- 操作系统垃圾文件 ----
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# ---- 编辑器 / IDE ----
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.sublime-workspace
+*.sublime-project
+
+# ---- Node（本项目零依赖，保险起见） ----
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-store/
+coverage/
+
+# ---- 环境变量与密钥 ----
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# ---- Python（本地 http.server 等临时产物） ----
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# ---- 临时文件 ----
+*.tmp
+*.bak
+*.orig
+*.rej
+.cache/
+tmp/
