@@ -20,7 +20,9 @@
 | `js/core/fx.js` | 全屏 canvas 特效：樱花、烟花、纸屑、星光；屏幕震动 | 单例画布；respect prefers-reduced-motion |
 | `js/ui/*.js` | 各屏幕与弹窗：router/home/quest/swift/match/learn/collection/omikuji/settings | 每个 UI 模块只经 `UI.show(name)` 被路由 |
 | `css/*.css` | base(主题变量/组件) screens(屏幕布局) animations(关键帧) | 主题 = `body[data-theme=…]` 覆盖 CSS 变量 |
-| `tools/validate.js` | 数据与逻辑不变量自检（node 直接运行） | 提交前必跑：`node tools/validate.js` |
+| `tools/validate.js` | 数据与逻辑不变量自检（node 直接运行） | 提交前必跑：`node tools/validate.js` 或 `npm test` |
+| `package.json` | 元信息 + 脚本入口（test / validate / serve） | 仅挂脚本，**零依赖**：不要引入任何 dependency |
+| `LICENSE` | MIT 许可证 | 再分发需保留版权声明 |
 | `docs/DESIGN.md` | 游戏设计定案（调研结论 → 决策） | 设计变更先改这里 |
 | `docs/PLAN.md` | 执行计划 + 进度日志 + 决策记录 | 每完成一个里程碑更新日志 |
 | `README.md` | 玩法说明与运行方式 | 面向玩家 |

@@ -41,12 +41,21 @@
 ## 开发者
 
 ```bash
+npm test                      # 等价于 node tools/validate.js
 node tools/validate.js        # 数据与逻辑不变量自检（1000+ 断言）
+npm run serve                 # 可选：http://127.0.0.1:8377/
 ```
 
 - 架构地图见 [`AGENTS.md`](AGENTS.md)；设计定案见 [`docs/DESIGN.md`](docs/DESIGN.md)；
   执行计划与决策日志见 [`docs/PLAN.md`](docs/PLAN.md)。
 - 零构建、零 npm 依赖；经典 `<script>` 加载，模块挂 `window` 命名空间。
+  `package.json` 只用于挂脚本与元信息，**不需要 `npm install`**。
 - 彩蛋：在首页连点日之丸三下。
+
+## 许可
+
+本项目以 [MIT 许可证](LICENSE) 发布，可自由使用、修改与再分发，仅需保留版权声明。
+
+© 2025 tairraos & codex
 
 —— あいうえお、旅途愉快。

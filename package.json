@@ -1,0 +1,35 @@
+{
+  "name": "kana-run",
+  "version": "1.0.0",
+  "description": "五十音物語（KANA MONOGATARI）——纯网页、零依赖、可离线的日语五十音学习游戏",
+  "private": true,
+  "license": "MIT",
+  "author": "tairraos & codex",
+  "homepage": "https://kana-monogatari.vercel.app",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tairraos/kana-run.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Tairraos/kana-run/issues"
+  },
+  "keywords": [
+    "japanese",
+    "kana",
+    "hiragana",
+    "katakana",
+    "learning",
+    "game",
+    "srs",
+    "vanilla-js",
+    "offline"
+  ],
+  "scripts": {
+    "test": "node tools/validate.js",
+    "validate": "node tools/validate.js",
+    "serve": "python3 -m http.server 8377"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
